@@ -1,5 +1,8 @@
 package com.ecumayferrr.controller;
 
+import java.util.List;
+
+import com.ecumayferrr.entity.Producto;
 import com.ecumayferrr.repository.ProductRepository;
 
 import org.springframework.stereotype.Controller;
@@ -12,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/products")
 public class ProductoController {
 	
-	//Se puede llamar con @Autowired pero es mejor a traves del constructor
+	//Se puede llamar con @Autowired pero es mejor a traves del constructor, facilita el testinh MOCK
 	private ProductRepository productRepository;
 
 	public ProductoController(ProductRepository productRepository) {
@@ -25,7 +28,11 @@ public class ProductoController {
 	//GetMapping spring nos va a cargar los modelos automaticamente. http://localhost:8080/products con el metodo GET
 	@GetMapping
 	public String findAll(Model model) {
-		model.addAttribute("product", "Hola mundo");
+		
+		//Ha difrenecia de la otra manera (anterior commit v1.2) aqui se carga una lista y obtenemos todos los produuctos.
+		List <Producto> productos = this.productRepository.findAll();
+		
+		model.addAttribute("products", productos);
 		return "product-list";
 	}
 	
