@@ -8,6 +8,8 @@ import com.ecumayferrr.repository.ProductRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 //Con @RequestMapping le decimos que este constructor va a escuchar en esa pagina es decir en la url.
@@ -36,4 +38,28 @@ public class ProductoController {
 		return "product-list";
 	}
 	
+	/*
+	 * Esto nos devolvera un formulario el getForm que usamos
+    GET http://localhost:8080/products/new
+     */
+    @GetMapping("/new")
+    public String getForm(Model model){
+        model.addAttribute("products", new Producto());
+        return "product-form";
+    }
+    
+    /*
+     * Aqui recibiremos un prodcuto
+    POST http://localhost:8080/products
+     */
+    @PostMapping
+    public String save(@ModelAttribute("product") Producto product){
+        this.productRepository.save(product);
+        return "redirect:/products";
+    }
+	
+    
+    //En el tutorial dicen que no hay que confundir @Controller con RestController que se usa para Api Rest que se vera más adelante.
+    //Controller se usa para los controladores de las aplciaciones web, la interfz del usuario en este caso se crea desde aqui desde el backend.
+    
 }
